@@ -8,12 +8,12 @@ There are three types of files stored in this folder:
 In order to get the qualification and scenario HITs up and running you will need to do several things. First you need to host the 
 following files on a domain that has a valid SSL certification:
 
-qualification.html
-scenario1.html
-scenario2.html
-scenario3.html
-scenario4.html
-scenario5.html
+*qualification.html
+*scenario1.html
+*scenario2.html
+*scenario3.html
+*scenario4.html
+*scenario5.html
 
 It is important that these files are hosted on a domain that has a valid SSL, otherwise mechanical turk will prevent the pages from 
 being shown to the workers (they will only see a blank page). Next you need to update the supplied input.csv file so that it contains
