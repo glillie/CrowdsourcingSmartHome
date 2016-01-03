@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<title>Qualification HIT</title>
+</head>
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="https://www.gisellelillie.com/jquery-colorfy/jquery.colorfy.js" type="text/javascript"></script>
+<style type="text/css">.area {
+       float: auto;
+       margin-left: auto;
+       margin-right: auto;
+       padding: 8px;
+       height: 400px;
+       border-color: black;
+       border-width: 1px;
+       border-style: solid;
+       font-size: 15px;
+       text-align: left;
+       outline: none;
+     }
+     .smart1 .states{
+     	color:#FF8C00;
+     }
+     .smart1 .device{
+     	color:#800080;
+     }
+     .smart1 .interactions{
+     	color:#008080;
+     }
+     .smart2 .states{
+     	color:#FF8C00;
+     }
+     .smart2 .device{
+     	color:#800080;
+     }
+     .smart2 .interactions{
+     	color:#008080;
+     }
+     .smart3 .states{
+     	color:#FF8C00;
+     }
+     .smart3 .device{
+     	color:#800080;
+     }
+     .smart3 .interactions{
+     	color:#008080;
+     }
+     .device-text {
+     	color:#800080;
+     }
+     .state-text {
+     	color:#FF8C00;
+     }
+     .action-text {
+     	color:#008080;
+     }
+     textarea {
+       width: 615px;
+     }
+</style>
+<script>
+     // This script is used to set up what keywords need to be colorfied.
+     // Regex information: 
+     //  \s+ matches at least one whitespace character in javascript (space, tab, carriage return, new line, vertical tab, form feed)
+     //  http://www.w3schools.com/jsref/jsref_regexp_whitespace.asp
+     //  ^ matches line start, $ matches line end (suggested include even though should be covered by \s)
+     //  (^|\s+) requires word to start with one whitespace character
+     //  (\s+|$) requires word to end with one whitespace character 
+     //  /i matches any case (lowercase, uppercase, camelcase, mixedcase)
+     //  whitespace at end and start required to prevent cases such as 'on' in 'motion' from being highlighted when on is a keyword
+
+     $.fn.colorfy.smart1 = {
+       "device": /(^|\s+)(garagelight|garagedetector)(\s+|$)/i,
+       "interactions": /(^|\s+)(if|is|and|then|set)(\s+|$)/i,
+       "states": /(^|\s+)(off|on|motion_detected|no_motion_detected)(\s+|$)/i 
+     };
+     $.fn.colorfy.smart2 = {
+       "device": /(^|\s+)(garagedoor|carpresencesensor)(\s+|$)/i,
+       "interactions": /(^|\s+)(if|is|and|then|set|wait|minutes)(\s+|$)/i,
+       "states": /(^|\s+)(opened|closed|locked|unlocked|presence_home|presence_not_home|presence_arriving|presence_departing)(\s+|$)/i 
+     };
+     $.fn.colorfy.smart3 = {
+       "device": /(^|\s+)(frontdoor|frontlight|presencesensor)(\s+|$)/i,
+       "interactions": /(^|\s+)(if|is|and|then|set|wait|until|or|minutes)(\s+|$)/i,
+       "states": /(^|\s+)(opened|closed|off|on|unlocked|locked|presence_home|presence_not_home|presence_arriving|presence_departing)(\s+|$)/i 
+     };
+</script><script>
+$(document).ready(function(){
+    // Detail how to color each text area
+    $("#scenario1").colorfy("smart1");
+    $("#scenario2").colorfy("smart2");
+    $("#scenario3").colorfy("smart3");
+    
+    // Add on click action to the Submit and Validate button
+    $("#validateButton").click(function(){ validateForm(); } );
+    
+    // Hide all of the error messages until needed
+    $("#errorText1").hide();
+    $("#errorText2").hide();
+    $("#errorText3").hide();
+    $("#errorText4").hide();
+
+    // Uncheck all radio buttons on load
+    document.getElementById("yes").checked  = false;
+    document.getElementById("some").checked = false;
+    document.getElementById("no").checked  = false;
+    document.getElementById("no_response").checked  = false;
+    document.getElementById("unsure").checked = false;
+});
+</script><script type="text/javascript">
+function validateForm() {
+
+   // Map containing valid keywords for scenario 1
+   var keywords_1 = {};
+   keywords_1["if"] = "if";
+   keywords_1["and"] = "and";
+   keywords_1["then"] = "then";
+   keywords_1["is"] = "is";
+   keywords_1["set"] = "set";
+   keywords_1["motion_detected"] = "motion_detected";
+   keywords_1["no_motion_detected"] = "no_motion_detected";
+   keywords_1["on"] = "on";
+   keywords_1["off"] = "off";
+   keywords_1["garagelight"] = "garagelight";
+   keywords_1["garagedetector"] = "garagedetector";
+   
+   // Map containing valid keywords for scenario 2
+   var keywords_2 = {};
+   keywords_2["if"] = "if";
+   keywords_2["and"] = "and";
+   keywords_2["then"] = "then";
+   keywords_2["is"] = "is";no_response
+   keywords_2["set"] = "set";
+   keywords_2["wait"] = "wait";
+   keywords_2["minutes"] = "minutes";
+   keywords_2["presence_home"] = "presence_home";
+   keywords_2["presence_not_home"] = "presence_not_home";
+   keywords_2["presence_arriving"] = "presence_arriving";
+   keywords_2["presence_departing"] = "presence_departing";
+   keywords_2["opened"] = "opened";
+   keywords_2["closed"] = "closed";
+   keywords_2["locked"] = "locked";
+   keywords_2["unlocked"] = "unlocked";
+   keywords_2["garagedoor"] = "garagedoor";
+   keywords_2["carpresencesensor"] = "carpresencesensor";
+   
+   // Map containing valid keywords for scenario 3
+   var keywords_3 = {};
+   keywords_3["if"] = "if";
+   keywords_3["and"] = "and";
+   keywords_3["then"] = "then";
+   keywords_3["is"] = "is";
+   keywords_3["set"] = "set";
+   keywords_3["wait"] = "wait";
+   keywords_3["until"] = "until";
+   keywords_3["minutes"] = "minutes";
+   keywords_3["or"] = "or";
+   keywords_3["unlocked"] = "unlocked";
+   keywords_3["locked"] = "locked";
+   keywords_3["opened"] = "opened";
+   keywords_3["closed"] = "closed";
+   keywords_3["on"] = "on";
+   keywords_3["off"] = "off";
+   keywords_3["presence_home"] = "presence_home";
+   keywords_3["presence_not_home"] = "presence_not_home";
+   keywords_3["presence_arriving"] = "presence_arriving";
+   keywords_3["presence_departing"] = "presence_departing";
+   keywords_3["frontlight"] = "frontlight";
+   keywords_3["frontdoor"] = "frontdoor";
+   keywords_3["presencesensor"] = "presencesensor";
+
+   // Verify scenario one user input
+   var text_1 = $("#scenario1").val();
+   var verified_1 = true;
+   
+   if( text_1 && text_1.trim() !== "") {
+     // Get input scenario text - lowercase it, strip it of return characters, trim it and split on each word
+     var words = $("#scenario1").val().toLowerCase().replace(/(\r\n|\n|\r)/gm," ").replace("  "," ").trim().split(" ");
+     
+     // Check if each word is contained in the allowable keywords list
+     for( var i = 0; i < words.length && verified_1; i++){
+        var temp = words[i];
+        
+        // Makes sure temp is not null/empty and that it does not appear in keywords
+        if(temp && !( temp in keywords_1 ) ){ 
+           verified_1 = false;
+        }
+     }
+   } else {
+      verified_1 = false;
+   }
+   
+   // Verify scenario two user input
+   var text_2 = $("#scenario2").val();
+   var verified_2 = true;
+   if( text_2 && text_2.trim() !== "") {
+     // Get input scenario text - lowercase it, strip it of return characters, trim it and split on each word
+     var words = $("#scenario2").val().toLowerCase().replace(/(\r\n|\n|\r)/gm," ").replace("  "," ").trim().split(" ");
+     
+     // Check if each word is contained in the allowable keywords list
+     for( var i = 0; i < words.length && verified_2; i++){
+        var temp = words[i];
+        
+        // Makes sure temp is not null/empty and that it does not appear in keywords
+        if(temp && !( temp in keywords_2 ) && isNaN(temp) ){ 
+           verified_2 = false;
+        }
+     }
+   } else {
+      verified_2 = false;
+   }
+   
+   // Verify scenario three user input
+   var text_3 = $("#scenario3").val();
+   var verified_3 = true;
+   if( text_3 && text_3.trim() !== "") {
+     // Get input scenario text - lowercase it, strip it of return characters, trim it and split on each word
+     var words = $("#scenario3").val().toLowerCase().replace(/(\r\n|\n|\r)/gm," ").replace("  "," ").trim().split(" ");
+     
+     // Check if each word is contained in the allowable keywords list
+     for( var i = 0; i < words.length && verified_3; i++){
+        var temp = words[i];
+        
+        // Makes sure temp is not null/empty and that it does not appear in keywords
+        if(temp && !( temp in keywords_3 ) && isNaN(temp)){ 
+           verified_3 = false;
+        }
+     }
+   } else {
+      verified_3 = false;
+   }
+  
+  // Update error text msg for scenario 1 as necessary 
+  if( !verified_1 ){
+     	$("#errorText1").show();
+     	$("#scenario1").css('border-color','red');
+  } else {
+     	$("#errorText1").hide();
+  }
+  
+  // Update error text msg for scenario 2 as necessary    
+  if( !verified_2 ) {
+     	$("#errorText2").show();
+     	$("#scenario2").css('border-color','red');
+  } else {
+     	$("#errorText2").hide();
+  }
+  
+  // Update error text msg for scenario 3 as necessary   
+  if( !verified_3 ) {
+     	$("#errorText3").show();
+     	$("#scenario3").css('border-color','red');
+  } else {
+     	$("#errorText3").hide();
+  }
+
+  // Verify that user has selected a programming experience radio button
+  var progExp = "";
+  if( !(document.getElementById("yes").checked || document.getElementById("some").checked || document.getElementById("no").checked || document.getElementById("no_response").checked || document.getElementById("unsure").checked) ) {
+     $("#errorText4").show();
+  } else {
+     $("#errorText4").hide();
+     progExp = $("input[type='radio'][name='radio']:checked").val();
+  }
+  
+  // Post message with user input to the parent page (this would be to the MTurk hit source code)   
+  if (verified_1 && verified_2 && verified_3 && progExp !== "") {
+     var msg = text_1 + ":" + text_2 + ":" + text_3 + ":" + progExp + ":" + document.getElementById("feedback").value;
+     window.parent.postMessage(msg , "*");
+  } 
+}
+</script><!-- Bootstrap v3.0.3 --></body>
+<link href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" rel="stylesheet" />
+<section class="container" id="DataCollection" style="margin-bottom:15px; padding: 10px 10px; font-family: Verdana, Geneva, sans-serif; color:#333333; font-size:0.9em;">
+<div class="row col-xs-12 col-md-12"><!-- Instructions -->
+<div class="panel panel-primary">
+<div class="panel-heading"><strong>Instructions</strong></div>
+
+<div class="panel-body">
+<p>We want you to play the role of a homeowner who is interested in programming interactions between devices in his or her home. Each of the devices is represented by a keyword, such as FrontDoor or HallLight. The interactions and state of the devices are also represented by keywords, such as OPENED or ON.</p>
+
+<p><strong>Task</strong>: Complete the logic for the given scenario using the supplied keywords. Several examples are provided below. Please look at the examples provided below for a better understanding of how the keywords relate to one another and how you should use the keywords to correctly express your answer.</p>
+
+<p><strong>Further Information</strong>:</p>
+
+<ul>
+	<li>Successfully completing this HIT will give you a qualification to work on further HITs like this one.</li>
+	<li>It is suggested that you use <strong>Chrome </strong>in order to successfully complete this HIT. You will most likely need to make changes to your browsers&#39; security settings if you wish to use a different browser.</li>
+	<li>We will only reject HITS that are blank or clearly abusive.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<p></p>
+
+<div class="row col-xs-12 col-md-12"><!-- Example Scenario -->
+<div class="panel panel-primary">
+<div class="panel-heading"><strong>Examples</strong></div>
+
+<div class="panel-body">
+<p><strong><u>Example 1: Simple Scenario</u></strong></p>
+
+<p><strong>Scenario Key Words:</strong></p>
+
+<ul>
+	<li><strong><span class="device-text">FrontDoor </span></strong>to represent the front door</li>
+	<li><strong><span class="device-text">HallLight </span></strong>to represent the hall light</li>
+	<li><strong><span class="state-text">CLOSED</span>, <span class="state-text">OPENED</span>, </strong><strong><span class="state-text"><strong><span class="state-text"><strong>LOCKED</strong></span></strong> </span></strong>and <strong><span class="state-text">UNLOCKED </span></strong>to represent the states of the doors</li>
+	<li><strong><span class="state-text">ON</span></strong> and <strong><span class="state-text">OFF </span></strong>to represent the states of the light</li>
+	<li><strong><span class="action-text">IF</span></strong>,&nbsp;<strong><span class="action-text">AND</span></strong>,&nbsp;<strong><span class="action-text">THEN</span></strong>,&nbsp;<strong><span class="action-text">IS</span></strong>, and&nbsp;<strong><span class="action-text">SET</span></strong></li>
+</ul>
+
+<p><strong>Scenario:</strong> You would like to have your hall light turn on when you open your front door.</p>
+
+<p><strong><strong>Correct </strong>Scenario Answer:</strong></p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><span class="action-text">IF</span> <span class="device-text">FrontDoor </span><span class="action-text">IS</span> <span class="state-text">OPENED</span> <span class="action-text">AND</span> <span class="device-text">HallLight </span><span class="action-text">IS</span> <span class="state-text">OFF&nbsp;</span></strong></p>
+
+<p><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="action-text">THEN&nbsp;</span><span class="device-text">HallLight </span><span class="action-text">SET&nbsp;</span><span class="state-text">ON&nbsp;</span></strong></p>
+
+<p><br />
+<u><strong>Example 2: More Complex Scenario</strong></u></p>
+
+<p><strong>Scenario Key Words:</strong></p>
+
+<ul>
+	<li><strong><span class="device-text">MotionSensor </span></strong>to represent your motion sensor</li>
+	<li><strong><span class="device-text">OutsideLight </span></strong>to represent your outside light</li>
+	<li><strong><span class="state-text">MOTION_DETECTED</span></strong> and <strong><span class="state-text">NO_MOTION_DETECTED</span></strong> to represent the states of the motion detector</li>
+	<li><strong><span class="state-text">ON</span></strong> and <strong><span class="state-text">OFF </span></strong>to represent the states of the light</li>
+	<li><strong><span class="action-text">IF</span></strong>,&nbsp;<strong><span class="action-text">AND</span></strong>,&nbsp;<strong><span class="action-text">THEN</span></strong>,&nbsp;<strong><span class="action-text">IS</span></strong>, <strong><span class="action-text">WAIT</span></strong>, <strong><span class="action-text">SET</span></strong> and <strong><span class="action-text">MINUTES</span></strong> to represent the various actions</li>
+</ul>
+
+<p><strong>Scenario:</strong> You would like to have your light turn on when motion is sensed, and then turn off after five minutes.</p>
+
+<p><strong><strong>Correct </strong>Scenario Answer:</strong></p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><span class="action-text">IF</span> <span class="device-text">MotionSensor </span><span class="action-text">IS</span> <span class="state-text">MOTION_DETECTED</span></strong><strong> <span class="action-text">AND</span> <span class="device-text">OutsideLight </span><span class="action-text">IS</span> <span class="state-text">OFF&nbsp;</span></strong></p>
+
+<p><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="action-text">THEN </span><span class="device-text">OutsideLight </span><span class="action-text">SET&nbsp;</span><span class="state-text">ON&nbsp;</span></strong></p>
+
+<p><strong><span class="state-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="action-text">WAIT<span style="color:#000000;"> 5 </span>MINUTES</span><span class="state-text"> </span><span class="action-text"> </span></strong></p>
+
+<p><strong><span class="state-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="action-text">THEN </span><span class="device-text">OutsideLight </span><span class="action-text">SET&nbsp;</span><span class="state-text">OFF </span></strong></p>
+
+<p><br />
+<u><strong>Example 3: Most Complex Scenario</strong></u></p>
+
+<p><strong>Scenario Key Words:</strong></p>
+
+<ul>
+	<li><strong><span class="device-text">InteriorGarageDoor </span></strong>to represent the door leading from garage into inside of house</li>
+	<li><strong><span class="device-text">GarageDoor </span></strong>to represent the car bay door on your garage</li>
+	<li><strong><span class="device-text">CarPresenceSensor </span></strong>to represent the presence sensor located in your car</li>
+	<li><strong><span class="state-text">CLOSED</span>, <span class="state-text">OPENED</span>, </strong><strong><span class="state-text"><strong><span class="state-text"><strong>LOCKED</strong></span></strong> </span></strong>and <strong><span class="state-text">UNLOCKED </span></strong>to represent the states of the doors</li>
+	<li><strong><span class="state-text">PRESENCE_HOME</span>, <span class="state-text">PRESENCE_NOT_HOME</span>, </strong><strong><span class="state-text"><strong><span class="state-text"><strong><strong><span class="state-text"><strong><span class="state-text">PRESENCE_ARRIVING</span></strong></span></strong></strong></span></strong> </span></strong>and <strong><span class="state-text"><strong><span class="state-text"><strong><span class="state-text">PRESENCE_DEPARTING</span></strong></span></strong></span></strong><strong><span class="state-text"> </span></strong>to represent the states of the presence sensor</li>
+	<li><strong><span class="action-text">IF</span></strong>,&nbsp;<strong><span class="action-text">AND</span></strong>,&nbsp;<strong><span class="action-text">THEN</span></strong>,&nbsp;<strong><span class="action-text">IS</span></strong>, <strong><span class="action-text">WAIT</span></strong>, <strong><span class="action-text">SET</span></strong>, <strong><span class="action-text">OR</span></strong>, <strong><span class="action-text">UNTIL</span></strong> and <strong><span class="action-text">MINUTES</span></strong> to represent the various actions</li>
+</ul>
+
+<p><strong>Scenario:</strong> You would like to have your garage door open when you arrive home and then close after either 5 minutes or when you enter the house.</p>
+
+<p><strong><strong>Correct </strong>Scenario Answer:</strong></p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><span class="action-text">IF</span> <span class="device-text">CarPresenceSensor </span><span class="action-text">IS</span> </strong><strong><span class="state-text"><strong><span class="state-text">PRESENCE_</span></strong>ARRIVING</span> <span class="action-text">AND</span> <span class="device-text">GarageDoor </span><span class="action-text">IS</span> <span class="state-text">CLOSED </span></strong></p>
+
+<p><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="action-text">THEN&nbsp;</span><span class="device-text">GarageDoor </span><span class="action-text">SET&nbsp;</span><span class="state-text">OPENED</span></strong></p>
+
+<p><strong><span class="state-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="action-text">WAIT<span style="color:#000000;"> 5 </span>MINUTES OR UNTIL </span><span class="device-text">InteriorGarageDoor </span><span class="action-text">IS</span> <span class="state-text">OPENED </span><span class="state-text"> </span><span class="action-text"> </span></strong></p>
+
+<p><strong><span class="state-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="action-text">THEN </span><span class="device-text">GarageDoor </span><span class="action-text">SET&nbsp;</span><span class="state-text">CLOSED </span></strong></p>
+</div>
+</div>
+</div>
+
+<div class="row col-xs-12 col-md-12"><!-- Scenario To Complete -->
+<div class="panel panel-primary" id="panel">
+<div class="panel-heading"><strong>Scenarios To Answer</strong></div>
+
+<div class="panel-body" id="panelbody" name="panelbody">
+<p>Please look at the examples provided above for a better understanding of how the keywords relate to one another and how you should use the keywords to correctly express your answer.</p>
+
+<p><strong>Scenario Key Words:</strong></p>
+
+<ul>
+	<li><strong><span class="device-text">GarageLight </span></strong>to represent the light above your garage door</li>
+	<li><strong><span class="device-text">GarageDetector </span></strong>to represent the motion detector outside your garage</li>
+	<li><strong><span class="state-text">MOTION_DETECTED</span></strong> and <strong><span class="state-text">NO_MOTION_DETECTED</span></strong> to represent the states of the motion detector</li>
+	<li><strong><span class="state-text">ON</span></strong> and <strong><span class="state-text">OFF </span></strong>to represent the states of the light</li>
+	<li><strong><span class="action-text">IF</span>, <span class="action-text">AND</span>, <span class="action-text">THEN</span>, <span class="action-text">IS</span></strong>, and <strong><span class="action-text">SET </span></strong>to represent the various actions</li>
+</ul>
+
+<p><strong>Scenario: </strong>You would like the light above your garage door to turn on when motion is detected by the motion detector outside of your garage.</p>
+<strong>Scenario Answer:&nbsp;</strong><font color="red">*</font><label id="errorText1" name="errorText1" style="color: red">Answer must contain only the supplied scenario keywords (without any punctuation). </label>
+
+<p><textarea cols="75" id="scenario1" name="scenario1" rows="5" spellcheck="false"></textarea></p>
+
+<p><br />
+<u><strong>Scenario 2</strong></u></p>
+
+<p><strong>Scenario Key Words:</strong></p>
+
+<ul>
+	<li><strong><span class="device-text">GarageDoor </span></strong>to represent the garage door</li>
+	<li><strong><span class="device-text">CarPresenceSensor </span></strong>to represent the presence sensor located in your car</li>
+	<li><strong><span class="state-text">CLOSED</span>, <span class="state-text">OPENED</span>, </strong><strong><span class="state-text"><strong><span class="state-text"><strong>LOCKED</strong></span></strong> </span></strong>and <strong><span class="state-text">UNLOCKED </span></strong>to represent the states of the door</li>
+	<li><strong><span class="state-text">PRESENCE_HOME</span>, <span class="state-text">PRESENCE_NOT_HOME</span>, </strong><strong><span class="state-text"><strong><span class="state-text"><strong><strong><span class="state-text"><strong><span class="state-text">PRESENCE_ARRIVING</span></strong></span></strong></strong></span></strong> </span></strong>and <strong><span class="state-text"><strong><span class="state-text"><strong><span class="state-text">PRESENCE_DEPARTING</span></strong></span></strong></span></strong><strong><span class="state-text"> </span></strong>to represent the states of the presence sensor</li>
+	<li><strong><span class="action-text">IF</span></strong>,&nbsp;<strong><span class="action-text">AND</span></strong>,&nbsp;<strong><span class="action-text">THEN</span></strong>,&nbsp;<strong><span class="action-text">IS</span></strong>, <strong><span class="action-text">WAIT</span></strong>, <strong><span class="action-text">SET</span></strong> and <strong><span class="action-text">MINUTES</span></strong> to represent the various actions</li>
+</ul>
+
+<p><strong>Scenario: </strong>You would like the garage door to open when you arrive home and then close after five minutes.</p>
+
+<p></p>
+
+<p><strong>Scenario Answer:&nbsp;</strong><font color="red">*</font><label id="errorText2" name="errorText2" style="color: red">Answer must contain only the supplied scenario keywords (without any punctuation). </label></p>
+
+<p><textarea cols="75" id="scenario2" name="scenario2" rows="5"> </textarea></p>
+
+<p></p>
+
+<p></p>
+
+<p></p>
+
+<p><br />
+<u><strong>Scenario 3</strong></u></p>
+
+<p><strong>Scenario Key Words:</strong></p>
+
+<ul>
+	<li><strong><span class="device-text">FrontDoor </span></strong>to represent the front door</li>
+	<li><strong><span class="device-text">FrontLight </span></strong>to represent the front door light</li>
+	<li><strong><span class="device-text">PresenceSensor </span></strong>to represent the presence sensor that you carry that tells your smart home system if you are at home, not at home, arriving home, or departing home</li>
+	<li><strong><span class="state-text">CLOSED</span>, <span class="state-text">OPENED</span>, </strong><strong><span class="state-text"><strong><span class="state-text"><strong>LOCKED</strong></span></strong> </span></strong>and <strong><span class="state-text">UNLOCKED </span></strong>to represent the states of the doors</li>
+	<li><strong><span class="state-text">ON</span></strong> and <strong><span class="state-text">OFF </span></strong>to represent the states of the light</li>
+	<li><strong><span class="state-text">PRESENCE_HOME</span>, <span class="state-text">PRESENCE_NOT_HOME</span>, </strong><strong><span class="state-text"><strong><span class="state-text"><strong><strong><span class="state-text"><strong><span class="state-text">PRESENCE_ARRIVING</span></strong></span></strong></strong></span></strong> </span></strong>and <strong><span class="state-text"><strong><span class="state-text"><strong><span class="state-text">PRESENCE_DEPARTING</span></strong></span></strong></span></strong><strong><span class="state-text"> </span></strong>to represent the states of the presence sensor</li>
+	<li><strong><span class="action-text">IF</span></strong>,&nbsp;<strong><span class="action-text">AND</span></strong>,&nbsp;<strong><span class="action-text">THEN</span></strong>,&nbsp;<strong><span class="action-text">IS</span></strong>, <strong><span class="action-text">WAIT</span></strong>, <strong><span class="action-text">SET</span></strong>, <strong><span class="action-text">OR</span></strong>, <strong><span class="action-text">UNTIL</span></strong> and <strong><span class="action-text">MINUTES</span></strong> to represent the various actions</li>
+</ul>
+
+<p><strong>Scenario: </strong>You would like to have your front door unlock and your front door light turn on when you arrive home. You would also like your door to lock and your light to turn off when after you have entered your front door or after five minutes have passed.</p>
+
+<p></p>
+
+<p><strong>Scenario Answer:&nbsp;</strong><font color="red">*</font><label id="errorText3" name="errorText3" style="color: red">Answer must contain only the supplied scenario keywords (without any punctuation). </label></p>
+
+<p><textarea cols="75" id="scenario3" name="scenario3" rows="5"> </textarea></p>
+
+<p><br />
+<strong>Do you have any previous programming experience? </strong><font color="red">*</font><label id="errorText4" name="errorText4" style="color: red">Please select an option. </label></p>
+
+<form id="form" name="form"><input id="yes" name="radio" type="radio" value="a_lot" /> A Lot<br />
+<input id="some" name="radio" type="radio" value="some" /> Some<br />
+<input id="no" name="radio" type="radio" value="none" /> None<br />
+<input id="no_response" name="radio" type="radio" value="didnt_want_to_respond" /> Would rather not say<br />
+<input id="unsure" name="radio" type="radio" value="unsure" /> Unsure</form>
+</div>
+</div>
+</div>
+&nbsp;
+
+<p><strong>Comments?</strong></p>
+
+<p><textarea cols="120" id="feedback" name="feedback" rows="2"></textarea>&nbsp;</p>
+&nbsp;<button id="validateButton" style="display: block;margin-left:auto;margin-right:auto;margin-bottom:0%" type="button">Validate and Submit</button>
+
+<p></p>
+
+<p style="text-align: center;">This information is being collected for potential research.</p>
+
+<p></p>
+</section>
+<!-- close container --></html>
