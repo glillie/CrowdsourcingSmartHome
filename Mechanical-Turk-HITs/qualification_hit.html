@@ -1,0 +1,76 @@
+<!-- Bootstrap v3.0.3 -->
+<link href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" rel="stylesheet" />
+<p><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+<!-- Setup -->
+<script>
+$(document).ready(function(){
+    
+  // Create IE + others compatible event handler
+  var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+  var eventer = window[eventMethod];
+  var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+
+  // Listen for a message from the child window
+  eventer(messageEvent,function(e) {
+
+    // HIT must have been accepted before HIT can be submitted
+    var name = "workerId";
+    var regexS = "[\?&]"+name+"=([^&#]*)"; 
+    var regex = new RegExp( regexS ); 
+    var tmpURL = window.location.href; 
+    var results = regex.exec( tmpURL ); 
+    if( results == null ) { 
+      return;
+    }
+
+    // Make sure message is coming from the iframe
+    document.getElementById("origin").value = event.origin;
+    if ( event.origin !== "https://www.gisellelillie.com" ) {
+      return;
+    }
+
+    // Split message into scenario and feedback using first instance of ':' character
+    var text = event.data;
+    document.getElementById("scenario1").value = text.substring(0,text.indexOf(":"));
+    text = text.substring(text.indexOf(":")+1);
+    document.getElementById("scenario2").value = text.substring(0,text.indexOf(":"));
+    text = text.substring(text.indexOf(":")+1);
+    document.getElementById("scenario3").value = text.substring(0,text.indexOf(":"));
+    text = text.substring(text.indexOf(":")+1);
+    document.getElementById("progExp").value = text.substring(0,text.indexOf(":"));
+    document.getElementById("feedback").value = text.substring(text.indexOf(":")+1);
+
+    // Programmatically click the submit button
+    document.getElementById("submitButton").click();
+  },false);
+
+  // Hide these objects from the user
+  $("#submitButton").hide();
+  $("#scenario1").hide();
+  $("#scenario2").hide();
+  $("#scenario3").hide();
+  $("#origin").hide();
+  $("#feedback").hide();
+  $("#progExp").hide();
+});
+</script></p>
+
+<!-- Add iframe containing HIT information. Must have https src or browsers reject (iframe shows up blank) -->
+<p><iframe frameborder="0" height="3250px" id="iframe" name="iframe" src="https://www.gisellelillie.com/research/smart/qualification.html" width="100%">
+Your browser does not support iframes. Please use a browser that does, such as Chrome. </iframe><br />
+<br />
+
+<!--  Text area to report message origin information-->
+<textarea border-color="LightGray" cols="125" id="origin" name="origin" rows="2"></textarea>
+
+<!--  Text area to report scenario information-->
+<textarea border-color="LightGray" cols="125" id="scenario1" name="scenario1" rows="2"></textarea>
+<textarea border-color="LightGray" cols="125" id="scenario2" name="scenario2" rows="2"></textarea>
+<textarea border-color="LightGray" cols="125" id="scenario3" name="scenario3" rows="2"></textarea>
+
+<!--  Text are to report feedback/comment information -->
+<textarea border-color="LightGray" cols="125" id="feedback" name="feedback" rows="2"></textarea>
+
+<!--  Text are to report programming experience information -->
+<textarea border-color="LightGray" cols="125" id="progExp" name="progExp" rows="2"></textarea></p>
