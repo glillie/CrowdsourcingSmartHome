@@ -30,7 +30,7 @@ $(document).ready(function(){
       return;
     }
 
-    // Split message into scenario and feedback using first instance of ':' character
+    // Split message into scenario, feedback and programming experience user input using ':' character
     var text = event.data;
     document.getElementById("scenario1").value = text.substring(0,text.indexOf(":"));
     text = text.substring(text.indexOf(":")+1);
